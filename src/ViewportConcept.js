@@ -18,8 +18,6 @@ function ViewportConcept() {
 	const [vHeightDifference, setVHeightDifference] = useState(window.outerHeight - window.innerHeight)
 	const [vWidthDifference, setVWidthDifference] = useState(window.outerWidth - window.innerWidth)
 
-	const [footerFocused, setFooterFocused] = useState(false)
-
 	const {classes} = useStyles(
 		{vvHeight, vvWidth}
 	)
@@ -53,10 +51,7 @@ function ViewportConcept() {
 
 	return (
 		//Keeping the height of the container div to be the height of the visualViewport
-		<div
-			className={classes.page}
-			onLoad={window.scrollTo(0, 0)}
-		>
+		<div className={classes.page}>
 			<div>
 				<div className={classes.runwayWrapper}>
 					<div className={classes.viewportSizes}>
@@ -67,10 +62,8 @@ function ViewportConcept() {
 						type='text'
 						className={classes.input}
 						onFocus={() => {
-							setFooterFocused(true)
 							window.scrollTo(0, 0)
 						}}
-						onBlur={() => setFooterFocused(false)}
 					/>
 					<div className={classes.runway}>
 				Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur ac bibendum purus. Fusce laoreet risus non erat aliquam, vitae pellentesque odio dignissim. Suspendisse laoreet porttitor finibus. Sed dignissim volutpat lacus, nec gravida est porta in. Nunc mollis, nisi eu efficitur imperdiet, lorem magna mattis turpis, vel tempus nisi lacus vel augue. Suspendisse dui nisi, aliquet ac lacus facilisis, feugiat mollis dolor. Aenean tincidunt aliquam erat, vestibulum porta mauris auctor sed. Sed varius lobortis urna in cursus. Nulla facilisi. Morbi bibendum sagittis lacus.
