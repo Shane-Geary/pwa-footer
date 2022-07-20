@@ -97,7 +97,8 @@ const useStyles = makeStyles()((_, props) => ({
 		width: '100%',
 		overflow: 'scroll',
 		WebkitOverflowScrolling: 'touch',
-		backgroundColor: 'green'
+		backgroundColor: '#ED2290',
+		color: '#FFF'
 	},
 	viewportSizes: {
 		fontSize: 14,
@@ -105,7 +106,7 @@ const useStyles = makeStyles()((_, props) => ({
 		position: 'absolute',
 		left: '35%',
 	},
-	input: {width: '25%'},
+	input: {width: 40},
 	runway: {
 		width: '100%',
 		height: '4000px',
