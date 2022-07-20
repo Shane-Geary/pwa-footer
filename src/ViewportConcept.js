@@ -89,7 +89,7 @@ const useStyles = makeStyles()((_, props) => ({
 		position: 'relative',
 		height: props.vvHeight,
 		width: props.vvWidth,
-		overflow: 'scroll'
+		overflow: 'hidden'
 	},
 	runwayWrapper: {
 		position: 'absolute',
