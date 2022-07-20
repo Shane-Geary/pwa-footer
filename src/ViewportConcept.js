@@ -118,7 +118,8 @@ const useStyles = makeStyles()((_, props) => ({
 		width: '100%',
 		bottom: '0%',
 		backgroundColor: 'pink',
-		zIndex: 1
+		zIndex: 1,
+		touchAction: 'none'
 	},
 }))
 
