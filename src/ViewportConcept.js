@@ -19,6 +19,7 @@ function ViewportConcept() {
 	const [vHeightDifference, setVHeightDifference] = useState(window.outerHeight - window.innerHeight)
 	const [vWidthDifference, setVWidthDifference] = useState(window.outerWidth - window.innerWidth)
 
+
 	//Instantiating TSS classes and passing props
 	const {classes} = useStyles(
 		{vvHeight, vvWidth}
@@ -130,7 +131,8 @@ const useStyles = makeStyles()((_, props) => ({
 		width: '100%',
 		bottom: '0%',
 		backgroundColor: 'pink',
-		zIndex: 1
+		zIndex: 1,
+		
 	},
 }))
 
