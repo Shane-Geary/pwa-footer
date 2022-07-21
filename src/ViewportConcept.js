@@ -1,6 +1,7 @@
 import {useState, useEffect} from 'react' //React hooks
 
 import {makeStyles} from 'tss-react/mui' // https://docs.tss-react.dev/
+import {GlobalStyles} from 'tss-react'// https://docs.tss-react.dev/
 
 
 function ViewportConcept() {
@@ -18,11 +19,12 @@ function ViewportConcept() {
 	const [vHeightDifference, setVHeightDifference] = useState(window.outerHeight - window.innerHeight)
 	const [vWidthDifference, setVWidthDifference] = useState(window.outerWidth - window.innerWidth)
 
+	//Instantiating TSS classes and passing props
 	const {classes} = useStyles(
 		{vvHeight, vvWidth}
 	)
 
-	// useEffect hook for displaying viewport sizes
+	// useEffect hook for resize event listener and displaying viewport sizes 
 	useEffect(() => {
 		const updateVV = (event) => {
 			// console.log(event)
@@ -52,6 +54,16 @@ function ViewportConcept() {
 	return (
 		//Keeping the height of the container div to be the height of the visualViewport
 		<div className={classes.page}>
+			<GlobalStyles 
+				styles={{
+					'body': {
+						margin: 0,
+						padding: 0,
+						overflow: 'hidden',
+						height: vvHeight
+					}
+				}}
+			/>
 			<div>
 				<div className={classes.runwayWrapper}>
 					<div className={classes.viewportSizes}>
@@ -118,8 +130,7 @@ const useStyles = makeStyles()((_, props) => ({
 		width: '100%',
 		bottom: '0%',
 		backgroundColor: 'pink',
-		zIndex: 1,
-		touchAction: 'none'
+		zIndex: 1
 	},
 }))
 

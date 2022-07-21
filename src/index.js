@@ -4,7 +4,7 @@ import App from './App'
 import reportWebVitals from './reportWebVitals'
 import {CacheProvider} from '@emotion/react'
 import createCache from '@emotion/cache'
-import './index.css'
+// import './index.css'
 
 export const muiCache = createCache({
 	'key': 'mui',
