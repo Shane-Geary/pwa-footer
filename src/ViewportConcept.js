@@ -3,8 +3,12 @@ import {useState, useEffect} from 'react' //React hooks
 import {makeStyles} from 'tss-react/mui' // https://docs.tss-react.dev/
 import {GlobalStyles} from 'tss-react'// https://docs.tss-react.dev/
 
+import iNoBounce from 'inobounce'
+
 
 function ViewportConcept() {
+
+	iNoBounce.enable()
 
 	//State for keeping the viewports height and width
 	const [vvHeight, setVVHeight] = useState(window.visualViewport.height)
@@ -90,7 +94,10 @@ Donec non enim ligula. Aenean dapibus hendrerit metus ornare condimentum. In pul
 Nunc dui quam, egestas quis massa cursus, hendrerit condimentum ante. Phasellus suscipit vulputate lectus, nec pulvinar sem ultrices sit amet. Phasellus ut euismod tortor, et pulvinar diam. Morbi sed condimentum ante. Sed posuere ornare erat sit amet sagittis. Donec sed urna pellentesque, elementum urna sed, condimentum ligula. Nullam porttitor vel tellus eu suscipit. Integer a turpis ut augue vehicula scelerisque. Nam ac urna nulla. Vestibulum lacus magna, gravida dapibus lobortis eu, porta eu sem.
 					</div>
 				</div>
-				<div className={classes.footerDiv}></div>
+				<div
+					className={classes.footerDiv}
+					onClick={() => console.log('footer clicked/touched')}
+				></div>
 			</div>
 		</div>
 	)
@@ -131,7 +138,7 @@ const useStyles = makeStyles()((_, props) => ({
 		width: '100%',
 		bottom: '0%',
 		backgroundColor: 'pink',
-		zIndex: 1,
+		zIndex: 1
 		
 	},
 }))
