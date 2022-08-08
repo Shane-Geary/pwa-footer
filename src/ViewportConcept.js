@@ -3,11 +3,12 @@ import {useState, useEffect} from 'react' //React hooks
 import {makeStyles} from 'tss-react/mui' // https://docs.tss-react.dev/
 import {GlobalStyles} from 'tss-react'// https://docs.tss-react.dev/
 
-import iNoBounce from 'inobounce'
+import iNoBounce from 'inobounce' // https://github.com/lazd/iNoBounce
 
 
 function ViewportConcept() {
 
+	//This magic library prevents scrolling issues in mobile browsers
 	iNoBounce.enable()
 
 	//State for keeping the viewports height and width
@@ -105,6 +106,16 @@ Nunc dui quam, egestas quis massa cursus, hendrerit condimentum ante. Phasellus 
 
 const useStyles = makeStyles()((_, props) => ({
 
+	footerDiv: {
+		position: 'absolute',
+		height: '44px',
+		width: '100%',
+		bottom: '0%',
+		backgroundColor: 'pink',
+		zIndex: 1
+		
+	},
+	input: {width: 40},
 	page: {
 		position: 'relative',
 		height: props.vvHeight,
@@ -126,21 +137,11 @@ const useStyles = makeStyles()((_, props) => ({
 		position: 'absolute',
 		left: '35%',
 	},
-	input: {width: 40},
 	runway: {
 		width: '100%',
 		height: '4000px',
 		marginTop: 40
-	},
-	footerDiv: {
-		position: 'absolute',
-		height: '44px',
-		width: '100%',
-		bottom: '0%',
-		backgroundColor: 'pink',
-		zIndex: 1
-		
-	},
+	}
 }))
 
 export default ViewportConcept
