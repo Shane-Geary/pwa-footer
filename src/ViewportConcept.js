@@ -15,8 +15,8 @@ function ViewportConcept() {
 	const [vvHeight, setVVHeight] = useState(window.visualViewport.height)
 	const [vvWidth, setVVWidth] = useState(window.visualViewport.width)
 
-	const [vInnerHeight, setVInnerHeight] = useState(window.innerHeight)
-	const [vInnerWidth, setVInnerWidth] = useState(window.innerWidth)
+	// const [vInnerHeight, setVInnerHeight] = useState(window.innerHeight)
+	// const [vInnerWidth, setVInnerWidth] = useState(window.innerWidth)
 
 	const [vOuterHeight, setVOuterHeight] = useState(window.outerHeight)
 	const [vOuterWidth, setVOuterWidth] = useState(window.outerWidth)
@@ -38,8 +38,8 @@ function ViewportConcept() {
 			setVVWidth(event.target.width)
 
 			setTimeout(() => {
-				setVInnerHeight(window.innerHeight)
-				setVInnerWidth(window.innerWidth)
+				// setVInnerHeight(window.innerHeight)
+				// setVInnerWidth(window.innerWidth)
 
 				setVOuterHeight(window.outerHeight)
 				setVOuterWidth(window.outerWidth)
@@ -98,7 +98,17 @@ Nunc dui quam, egestas quis massa cursus, hendrerit condimentum ante. Phasellus 
 				<div
 					className={classes.footerDiv}
 					onClick={() => console.log('footer clicked/touched')}
-				></div>
+				>
+					<input
+						type='text'
+						className={classes.input}
+						onFocus={() => {
+							setTimeout(()=>{
+								window.scrollTo(0, 0)
+							}, 100)
+						}}
+					/>
+				</div>
 			</div>
 		</div>
 	)
@@ -108,6 +118,9 @@ const useStyles = makeStyles()((_, props) => ({
 
 	footerDiv: {
 		position: 'absolute',
+		display: 'flex',
+		justifyContent: 'center',
+		alignItems: 'center',
 		height: '44px',
 		width: '100%',
 		bottom: '0%',
