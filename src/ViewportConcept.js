@@ -1,4 +1,4 @@
-import {useState, useEffect} from 'react' //React hooks
+import {useState, useEffect, useRef} from 'react' //React hooks
 
 import {makeStyles} from 'tss-react/mui' // https://docs.tss-react.dev/
 import {GlobalStyles} from 'tss-react'// https://docs.tss-react.dev/
@@ -23,6 +23,8 @@ function ViewportConcept() {
 
 	const [vHeightDifference, setVHeightDifference] = useState(window.outerHeight - window.innerHeight)
 	const [vWidthDifference, setVWidthDifference] = useState(window.outerWidth - window.innerWidth)
+
+	const pageRef = useRef(null)
 
 
 	//Instantiating TSS classes and passing props
@@ -59,13 +61,16 @@ function ViewportConcept() {
 
 	return (
 		//Keeping the height of the container div to be the height of the visualViewport
-		<div className={classes.page}>
+		<div
+			ref={pageRef}
+			className={classes.page}
+		>
 			<GlobalStyles 
 				styles={{
 					'body': {
 						margin: 0,
 						padding: 0,
-						overflow: 'hidden',
+						overflow: 'hidden'
 					}
 				}}
 			/>
@@ -76,22 +81,44 @@ function ViewportConcept() {
 						<div>Width px Ext/VVP/VH - {vWidthDifference}/{vvWidth}/{vOuterWidth}</div>
 					</div>
 
-					<input
+					<textarea
 						type='text'
 						className={classes.input}
-						onFocus={() => {
-							window.scrollTo(0, 0)
+						onTouchStart={(e) => {
+							e.target.readOnly = true
+							pageRef.current.classList.add(classes.pageAppend)
+						}}
+						onFocus={(e) => {
+							e.target.readOnly = false
+							// setTimeout(()=>{
+							// 	window.scrollTo({top: 0, left: 0, behavior: 'smooth'})
+							// }, 1000)
+						}}
+						onTouchEnd={(e) => {
+							e.target.readOnly = false
+							e.target.focus({preventScroll: true})
 						}}
 					/>
 					
 					<div className={classes.runwayTop}>
 
 					</div>
-					<input
+					<textarea
 						type='text'
 						className={classes.input}
-						onFocus={() => {
-							window.scrollTo(0, 0)
+						onTouchStart={(e) => {
+							e.target.readOnly = true
+							pageRef.current.classList.add(classes.pageAppend)
+						}}
+						onFocus={(e) => {
+							e.target.readOnly = false
+							// setTimeout(()=>{
+							// 	window.scrollTo({top: 0, left: 0, behavior: 'smooth'})
+							// }, 1000)
+						}}
+						onTouchEnd={(e) => {
+							e.target.readOnly = false
+							e.target.focus({preventScroll: true})
 						}}
 					/>
 					<div className={classes.runway}>
@@ -110,13 +137,22 @@ Nunc dui quam, egestas quis massa cursus, hendrerit condimentum ante. Phasellus 
 					className={classes.footerDiv}
 					onClick={() => console.log('footer clicked/touched')}
 				>
-					<input
+					<textarea
 						type='text'
 						className={classes.input}
-						onFocus={() => {
-							setTimeout(()=>{
-								window.scrollTo(0, 0)
-							}, 100)
+						onTouchStart={(e) => {
+							e.target.readOnly = true
+							pageRef.current.classList.add(classes.pageAppend)
+						}}
+						onFocus={(e) => {
+							e.target.readOnly = false
+							// setTimeout(()=>{
+							// 	window.scrollTo({top: 0, left: 0, behavior: 'smooth'})
+							// }, 1000)
+						}}
+						onTouchEnd={(e) => {
+							e.target.readOnly = false
+							e.target.focus({preventScroll: true})
 						}}
 					/>
 				</div>
@@ -142,9 +178,18 @@ const useStyles = makeStyles()((_, props) => ({
 	input: {width: 40},
 	page: {
 		position: 'relative',
-		height: props.vvHeight,
-		width: props.vvWidth,
+		height: '100dvh',
+		width: '100dvw',
 		overflow: 'hidden'
+	},
+	pageAppend: {
+		// height: '410.65625px',
+		height: '355px',
+		transition: 'height .5s',
+
+		// TODO: Easing-curve: ease-in-out
+		// transitionTimingFunction: 'ease-in-out'
+		transitionTimingFunction: 'cubic-bezier(.45, .6, .33, .99)'
 	},
 	runwayWrapper: {
 		position: 'absolute',
@@ -152,7 +197,7 @@ const useStyles = makeStyles()((_, props) => ({
 		width: '100%',
 		overflow: 'scroll',
 		WebkitOverflowScrolling: 'touch',
-		backgroundColor: '#ed2290',
+		backgroundColor: '#ED2290',
 		color: 'white'
 	},
 	viewportSizes: {
