@@ -75,6 +75,15 @@ function ViewportConcept() {
 						Height px Ext/VVP/VH - {vHeightDifference}/{vvHeight}/{vOuterHeight}
 						<div>Width px Ext/VVP/VH - {vWidthDifference}/{vvWidth}/{vOuterWidth}</div>
 					</div>
+
+					<input
+						type='text'
+						className={classes.input}
+						onFocus={() => {
+							window.scrollTo(0, 0)
+						}}
+					/>
+					
 					<div className={classes.runwayTop}>
 
 					</div>
@@ -153,7 +162,7 @@ const useStyles = makeStyles()((_, props) => ({
 		left: '35%',
 	},
 
-	runwayTop: {height: '100px'},
+	runwayTop: {height: '300px'},
 
 	runway: {
 		width: '100%',
