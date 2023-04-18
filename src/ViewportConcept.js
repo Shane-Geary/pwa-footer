@@ -46,7 +46,7 @@ function ViewportConcept() {
 
 				setVHeightDifference(window.outerHeight - window.visualViewport.height)
 				setVWidthDifference(window.outerWidth - window.visualViewport.width)
-			}, 500)
+			}, 0)
 		}
 
 		const resizeEvent = window.visualViewport.addEventListener('resize', updateVV)
@@ -66,7 +66,6 @@ function ViewportConcept() {
 						margin: 0,
 						padding: 0,
 						overflow: 'hidden',
-						height: vvHeight
 					}
 				}}
 			/>
