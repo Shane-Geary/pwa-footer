@@ -75,6 +75,9 @@ function ViewportConcept() {
 						Height px Ext/VVP/VH - {vHeightDifference}/{vvHeight}/{vOuterHeight}
 						<div>Width px Ext/VVP/VH - {vWidthDifference}/{vvWidth}/{vOuterWidth}</div>
 					</div>
+					<div className={classes.runwayTop}>
+
+					</div>
 					<input
 						type='text'
 						className={classes.input}
@@ -140,8 +143,8 @@ const useStyles = makeStyles()((_, props) => ({
 		width: '100%',
 		overflow: 'scroll',
 		WebkitOverflowScrolling: 'touch',
-		backgroundColor: '#ED2290',
-		color: '#FFF'
+		backgroundColor: '#ed2290',
+		color: 'white'
 	},
 	viewportSizes: {
 		fontSize: 14,
@@ -149,6 +152,9 @@ const useStyles = makeStyles()((_, props) => ({
 		position: 'absolute',
 		left: '35%',
 	},
+
+	runwayTop: {height: '100px'},
+
 	runway: {
 		width: '100%',
 		height: '4000px',
