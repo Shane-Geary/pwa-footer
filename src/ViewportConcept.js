@@ -138,10 +138,13 @@ Nunc dui quam, egestas quis massa cursus, hendrerit condimentum ante. Phasellus 
 						type='text'
 						className={classes.input}
 						onTouchStart={(e) => {
-							e.target.focus({preventScroll: true})
+							// e.target.focus({preventScroll: true})
 							// footerRef.current.classList.add(classes.footerDivAppend)
 						}}
 						onTouchEnd={(e) => {
+							e.target.focus({preventScroll: true})
+						}}
+						onClick={(e) => {
 							e.target.focus({preventScroll: true})
 							footerRef.current.classList.add(classes.footerDivAppend)
 						}}
@@ -173,9 +176,9 @@ const useStyles = makeStyles()((_, props) => ({
 	},
 	footerDivAppend: {
 		// Iphone
-		bottom: '224.34375px'
+		// bottom: '224.34375px'
 		// Android
-		// bottom: '294px'
+		bottom: '294px'
 	},
 	input: {width: 40},
 	page: {
