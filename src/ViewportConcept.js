@@ -2,7 +2,7 @@ import {useState, useEffect, useRef} from 'react' //React hooks
 
 import {makeStyles} from 'tss-react/mui' // https://docs.tss-react.dev/
 import {GlobalStyles} from 'tss-react'// https://docs.tss-react.dev/
-import useScroll from './Hooks/useScroll'
+// import useScroll from './Hooks/useScroll'
 
 import iNoBounce from 'inobounce' // https://github.com/lazd/iNoBounce
 
@@ -28,6 +28,7 @@ function ViewportConcept() {
 	// const pageRef = useScroll()
 	const pageRef = useRef(null)
 
+	const runwayWrapperRef = useRef(null)
 
 	//Instantiating TSS classes and passing props
 	const {classes} = useStyles(
@@ -38,19 +39,20 @@ function ViewportConcept() {
 	useEffect(() => {
 		const updateVV = (event) => {
 			// console.log(event)
-			setVVHeight(event.target.height)
-			setVVWidth(event.target.width)
 
 			setTimeout(() => {
 				// setVInnerHeight(window.innerHeight)
 				// setVInnerWidth(window.innerWidth)
+
+				// setVVHeight(event.target.height)
+				// setVVWidth(event.target.width)
 
 				setVOuterHeight(window.outerHeight)
 				setVOuterWidth(window.outerWidth)
 
 				setVHeightDifference(window.outerHeight - window.visualViewport.height)
 				setVWidthDifference(window.outerWidth - window.visualViewport.width)
-			}, 0)
+			}, 100)
 		}
 
 		const resizeEvent = window.visualViewport.addEventListener('resize', updateVV)
@@ -77,7 +79,10 @@ function ViewportConcept() {
 				}}
 			/>
 			<div>
-				<div className={classes.runwayWrapper}>
+				<div
+					ref={runwayWrapperRef}
+					className={classes.runwayWrapper}
+				>
 					<div className={classes.viewportSizes}>
 						Height px Ext/VVP/VH - {vHeightDifference}/{vvHeight}/{vOuterHeight}
 						<div>Width px Ext/VVP/VH - {vWidthDifference}/{vvWidth}/{vOuterWidth}</div>
@@ -88,18 +93,20 @@ function ViewportConcept() {
 						className={classes.input}
 						onTouchStart={(e) => {
 							e.target.readOnly = true
-							pageRef.current.classList.add(classes.pageAppend)
+							// pageRef.current.classList.add(classes.pageAppend)
 						}}
-						onFocus={(e) => {
-							e.target.readOnly = false
-							// setTimeout(()=>{
-							// 	window.scrollTo({top: 0, left: 0, behavior: 'smooth'})
-							// }, 1000)
-						}}
-						onTouchEnd={(e) => {
-							e.target.readOnly = false
-							e.target.focus({preventScroll: true})
-						}}
+						// onFocus={(e) => {
+						// 	setTimeout(()=>{
+						// 		// window.scrollTo({top: 0, left: 0, behavior: 'smooth'})
+						// 		e.target.readOnly = false
+						// 	}, 1000)
+						// }}
+						// onPointerLeave={(e) => {
+						// 	setTimeout(() => {
+						// 		e.target.readOnly = false
+						// 		e.target.focus({preventScroll: true})
+						// 	}, 1000)
+						// }}
 					/>
 					
 					<div className={classes.runwayTop}>
@@ -109,18 +116,20 @@ function ViewportConcept() {
 						type='text'
 						className={classes.input}
 						onTouchStart={(e) => {
+							e.target.focus({preventScroll: true})
 							e.target.readOnly = true
 							pageRef.current.classList.add(classes.pageAppend)
+							
 						}}
-						onFocus={(e) => {
-							e.target.readOnly = false
-							// setTimeout(()=>{
-							// 	window.scrollTo({top: 0, left: 0, behavior: 'smooth'})
-							// }, 1000)
-						}}
+						// onFocus={(e) => {
+						// 	setTimeout(()=>{
+						// 		// window.scrollTo({top: 0, left: 0, behavior: 'smooth'})
+						// 		e.target.readOnly = false
+						// 	}, 1000)
+						// }}
 						onTouchEnd={(e) => {
-							e.target.readOnly = false
 							e.target.focus({preventScroll: true})
+							e.target.readOnly = false
 						}}
 					/>
 					<div className={classes.runway}>
@@ -143,19 +152,17 @@ Nunc dui quam, egestas quis massa cursus, hendrerit condimentum ante. Phasellus 
 						type='text'
 						className={classes.input}
 						onTouchStart={(e) => {
+							// e.target.focus({preventScroll: true})
 							e.target.readOnly = true
-							pageRef.current.classList.add(classes.pageAppend)
 						}}
-						onFocus={(e) => {
-							e.target.readOnly = false
-							// setTimeout(()=>{
-							// 	window.scrollTo({top: 0, left: 0, behavior: 'smooth'})
-							// }, 1000)
-						}}
-						onTouchEnd={(e) => {
-							e.target.readOnly = false
-							e.target.focus({preventScroll: true})
-						}}
+						// onTouchEnd={(e) => {
+						// 	e.target.readOnly = false
+						// 	e.target.focus({preventScroll: true})
+						// 	pageRef.current.classList.add(classes.pageAppend)
+						// 	setTimeout(() => {
+						// 		setVVHeight(e.target.height)
+						// 	}, 200)
+						// }}
 					/>
 				</div>
 			</div>
@@ -166,16 +173,18 @@ Nunc dui quam, egestas quis massa cursus, hendrerit condimentum ante. Phasellus 
 const useStyles = makeStyles()((_, props) => ({
 
 	footerDiv: {
+		// TODO: Fixed was preventing footer from moving on scroll - Android
+		// position: 'fixed',
+
 		position: 'absolute',
 		display: 'flex',
 		justifyContent: 'center',
 		alignItems: 'center',
 		height: '44px',
 		width: '100%',
-		bottom: '0%',
+		bottom: '0',
 		backgroundColor: 'pink',
 		zIndex: 1
-		
 	},
 	input: {width: 40},
 	page: {
@@ -185,6 +194,7 @@ const useStyles = makeStyles()((_, props) => ({
 		overflow: 'hidden'
 	},
 	pageAppend: {
+		overflow: 'hidden',
 		// TODO: This is for Iphone X
 		height: '410.65625px',
 		// height: '355px',
@@ -198,7 +208,7 @@ const useStyles = makeStyles()((_, props) => ({
 		position: 'absolute',
 		height: '100%',
 		width: '100%',
-		overflow: 'scroll',
+		overflowY: 'scroll',
 		WebkitOverflowScrolling: 'touch',
 		backgroundColor: '#ED2290',
 		color: 'white'
