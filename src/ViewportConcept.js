@@ -4,13 +4,10 @@ import {makeStyles} from 'tss-react/mui' // https://docs.tss-react.dev/
 import {GlobalStyles} from 'tss-react'// https://docs.tss-react.dev/
 // import useScroll from './Hooks/useScroll'
 
-import iNoBounce from 'inobounce' // https://github.com/lazd/iNoBounce
-
 
 function ViewportConcept() {
 
 	//This magic library prevents scrolling issues in mobile browsers
-	iNoBounce.enable()
 
 	//State for keeping the viewports height and width
 	const [vvHeight, setVVHeight] = useState(window.visualViewport.height)
@@ -27,8 +24,8 @@ function ViewportConcept() {
 
 	// const pageRef = useScroll()
 	const pageRef = useRef(null)
-
 	const runwayWrapperRef = useRef(null)
+	const footerRef = useRef(null)
 
 	//Instantiating TSS classes and passing props
 	const {classes} = useStyles(
@@ -92,21 +89,15 @@ function ViewportConcept() {
 						type='text'
 						className={classes.input}
 						onTouchStart={(e) => {
-							e.target.readOnly = true
-							// pageRef.current.classList.add(classes.pageAppend)
+							e.target.focus({preventScroll: true})
+							footerRef.current.classList.add(classes.footerDivAppend)
 						}}
-						// onFocus={(e) => {
-						// 	setTimeout(()=>{
-						// 		// window.scrollTo({top: 0, left: 0, behavior: 'smooth'})
-						// 		e.target.readOnly = false
-						// 	}, 1000)
-						// }}
-						// onPointerLeave={(e) => {
-						// 	setTimeout(() => {
-						// 		e.target.readOnly = false
-						// 		e.target.focus({preventScroll: true})
-						// 	}, 1000)
-						// }}
+						onTouchEnd={(e) => {
+							e.target.focus({preventScroll: true})
+						}}
+						onBlur={(e) => {
+							footerRef.current.classList.remove(classes.footerDivAppend)
+						}}
 					/>
 					
 					<div className={classes.runwayTop}>
@@ -117,19 +108,13 @@ function ViewportConcept() {
 						className={classes.input}
 						onTouchStart={(e) => {
 							e.target.focus({preventScroll: true})
-							e.target.readOnly = true
-							pageRef.current.classList.add(classes.pageAppend)
-							
+							footerRef.current.classList.add(classes.footerDivAppend)
 						}}
-						// onFocus={(e) => {
-						// 	setTimeout(()=>{
-						// 		// window.scrollTo({top: 0, left: 0, behavior: 'smooth'})
-						// 		e.target.readOnly = false
-						// 	}, 1000)
-						// }}
 						onTouchEnd={(e) => {
 							e.target.focus({preventScroll: true})
-							e.target.readOnly = false
+						}}
+						onBlur={(e) => {
+							footerRef.current.classList.remove(classes.footerDivAppend)
 						}}
 					/>
 					<div className={classes.runway}>
@@ -145,6 +130,7 @@ Nunc dui quam, egestas quis massa cursus, hendrerit condimentum ante. Phasellus 
 					</div>
 				</div>
 				<div
+					ref={footerRef}
 					className={classes.footerDiv}
 					onClick={() => console.log('footer clicked/touched')}
 				>
@@ -152,16 +138,15 @@ Nunc dui quam, egestas quis massa cursus, hendrerit condimentum ante. Phasellus 
 						type='text'
 						className={classes.input}
 						onTouchStart={(e) => {
-							// e.target.focus({preventScroll: true})
-							e.target.readOnly = true
+							e.target.focus({preventScroll: true})
+							footerRef.current.classList.add(classes.footerDivAppend)
 						}}
-						// onTouchEnd={(e) => {
-						// 	e.target.readOnly = false
-						// 	e.target.focus({preventScroll: true})
-						// 	pageRef.current.classList.add(classes.pageAppend)
-						// 	setTimeout(() => {
-						// 		setVVHeight(e.target.height)
-						// 	}, 200)
+						onTouchEnd={(e) => {
+							e.target.focus({preventScroll: true})
+						}}
+						// onBlur={(e) => {
+						// 		footerRef.current.classList.remove(classes.footerDivAppend)
+
 						// }}
 					/>
 				</div>
@@ -176,7 +161,7 @@ const useStyles = makeStyles()((_, props) => ({
 		// TODO: Fixed was preventing footer from moving on scroll - Android
 		// position: 'fixed',
 
-		position: 'absolute',
+		position: 'fixed',
 		display: 'flex',
 		justifyContent: 'center',
 		alignItems: 'center',
@@ -186,6 +171,9 @@ const useStyles = makeStyles()((_, props) => ({
 		backgroundColor: 'pink',
 		zIndex: 1
 	},
+	footerDivAppend: {
+		bottom: '224.34375px'
+	},
 	input: {width: 40},
 	page: {
 		position: 'relative',
@@ -193,17 +181,15 @@ const useStyles = makeStyles()((_, props) => ({
 		width: '100dvw',
 		overflow: 'hidden'
 	},
-	pageAppend: {
-		overflow: 'hidden',
-		// TODO: This is for Iphone X
-		height: '410.65625px',
-		// height: '355px',
-		transition: 'height .5s',
-
-		// TODO: Easing-curve: ease-in-out
-		// transitionTimingFunction: 'ease-in-out'
-		transitionTimingFunction: 'cubic-bezier(.45, .6, .33, .99)'
-	},
+	// pageAppend: {
+	// 	overflow: 'hidden',
+	// 	// TODO: This is for Iphone X
+	// 	// height: '410.65625px',
+	// 	height: '355px',
+	// 	transition: 'height .5s',
+	// 	// TODO: Easing-curve: ease-in-out
+	// 	transitionTimingFunction: 'cubic-bezier(.45, .6, .33, .99)'
+	// },
 	runwayWrapper: {
 		position: 'absolute',
 		height: '100%',
