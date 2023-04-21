@@ -90,10 +90,10 @@ function ViewportConcept() {
 						className={classes.input}
 						onTouchStart={(e) => {
 							e.target.focus({preventScroll: true})
-							footerRef.current.classList.add(classes.footerDivAppend)
 						}}
 						onTouchEnd={(e) => {
 							e.target.focus({preventScroll: true})
+							footerRef.current.classList.add(classes.footerDivAppend)
 						}}
 						onBlur={(e) => {
 							footerRef.current.classList.remove(classes.footerDivAppend)
@@ -108,10 +108,10 @@ function ViewportConcept() {
 						className={classes.input}
 						onTouchStart={(e) => {
 							e.target.focus({preventScroll: true})
-							footerRef.current.classList.add(classes.footerDivAppend)
 						}}
 						onTouchEnd={(e) => {
 							e.target.focus({preventScroll: true})
+							footerRef.current.classList.add(classes.footerDivAppend)
 						}}
 						onBlur={(e) => {
 							footerRef.current.classList.remove(classes.footerDivAppend)
@@ -139,15 +139,15 @@ Nunc dui quam, egestas quis massa cursus, hendrerit condimentum ante. Phasellus 
 						className={classes.input}
 						onTouchStart={(e) => {
 							e.target.focus({preventScroll: true})
-							footerRef.current.classList.add(classes.footerDivAppend)
+							// footerRef.current.classList.add(classes.footerDivAppend)
 						}}
 						onTouchEnd={(e) => {
 							e.target.focus({preventScroll: true})
+							footerRef.current.classList.add(classes.footerDivAppend)
 						}}
-						// onBlur={(e) => {
-						// 		footerRef.current.classList.remove(classes.footerDivAppend)
-
-						// }}
+						onBlur={(e) => {
+							footerRef.current.classList.remove(classes.footerDivAppend)
+						}}
 					/>
 				</div>
 			</div>
@@ -172,7 +172,10 @@ const useStyles = makeStyles()((_, props) => ({
 		zIndex: 1
 	},
 	footerDivAppend: {
+		// Iphone
 		bottom: '224.34375px'
+		// Android
+		// bottom: '294px'
 	},
 	input: {width: 40},
 	page: {
