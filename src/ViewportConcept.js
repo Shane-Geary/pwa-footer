@@ -60,6 +60,7 @@ function ViewportConcept() {
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [])
 
+
 	return (
 		//Keeping the height of the container div to be the height of the visualViewport
 		<div
@@ -106,6 +107,9 @@ function ViewportConcept() {
 					<textarea
 						type='text'
 						className={classes.input}
+							onClick={(e) => {
+							runwayWrapperRef.current.scrollTo(0, 200)
+						}}
 						onTouchStart={(e) => {
 							e.target.focus({preventScroll: true})
 						}}
@@ -176,9 +180,9 @@ const useStyles = makeStyles()((_, props) => ({
 	},
 	footerDivAppend: {
 		// Iphone
-		// bottom: '224.34375px'
+		bottom: '224.34375px'
 		// Android
-		bottom: '294px'
+		// bottom: '294px'
 	},
 	input: {width: 40},
 	page: {
