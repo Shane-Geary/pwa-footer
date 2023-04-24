@@ -60,6 +60,18 @@ function ViewportConcept() {
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [])
 
+	useEffect(() => {
+		// footerRef.current.addEventListener('touchstart', (e) => {
+		// 	const touchStart = e.touches
+		// })
+		const bodyElement = document.body
+		bodyElement.addEventListener('mousewheel', (e) => {
+			console.log(e)
+			
+		})
+		console.log(bodyElement)
+	}, [])
+
 
 	return (
 		//Keeping the height of the container div to be the height of the visualViewport
