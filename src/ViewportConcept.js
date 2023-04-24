@@ -72,6 +72,19 @@ function ViewportConcept() {
 		console.log(bodyElement)
 	}, [])
 
+	useEffect(() => {
+		const handleTouchMove = (e) => {
+			e.preventDefault()
+		}
+
+		footerRef.current.addEventListener('touchmove', handleTouchMove, {passive: false})
+
+		return () => {
+			footerRef.current.removeEventListener('touchmove', handleTouchMove)
+		}
+	}, [])
+
+
 
 	return (
 		//Keeping the height of the container div to be the height of the visualViewport
@@ -191,10 +204,12 @@ const useStyles = makeStyles()((_, props) => ({
 		zIndex: 1
 	},
 	footerDivAppend: {
-		// Iphone
-		bottom: '224.34375px'
+		// shanes Iphone
+		// bottom: '224.34375px',
+		// Adams Iphone
+		// bottom: '234px',
 		// Android
-		// bottom: '294px'
+		bottom: '294px'
 	},
 	input: {width: 40},
 	page: {
