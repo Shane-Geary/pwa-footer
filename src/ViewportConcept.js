@@ -4,10 +4,15 @@ import {makeStyles} from 'tss-react/mui' // https://docs.tss-react.dev/
 import {GlobalStyles} from 'tss-react'// https://docs.tss-react.dev/
 // import useScroll from './Hooks/useScroll'
 
-import {useInView} from 'react-intersection-observer'
+// import {useInView} from 'react-intersection-observer'
+
 
 
 function ViewportConcept() {
+
+	console.log('hello')
+
+	const elementRef = useRef(null)
 
 	//This magic library prevents scrolling issues in mobile browsers
 
@@ -34,6 +39,7 @@ function ViewportConcept() {
 	const {classes} = useStyles(
 		{vvHeight, vvWidth}
 	)
+	
 
 	// useEffect hook for resize event listener and displaying viewport sizes 
 	useEffect(() => {
@@ -63,15 +69,15 @@ function ViewportConcept() {
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [])
 
-	useEffect(() => {
-		// footerRef.current.addEventListener('touchstart', (e) => {
-		// 	const touchStart = e.touches
-		// })
-		window.document.documentElement.addEventListener('touchmove', (e) => {
-			console.log(ref.current)
+	// useEffect(() => {
+	// 	// footerRef.current.addEventListener('touchstart', (e) => {
+	// 	// 	const touchStart = e.touches
+	// 	// })
+	// 	window.document.documentElement.addEventListener('touchmove', (e) => {
+	// 		console.log(ref.current)
 			
-		})
-	}, [])
+	// 	})
+	// }, [])
 
 	useEffect(() => {
 		const handleTouchMove = (e) => {
@@ -85,27 +91,60 @@ function ViewportConcept() {
 		}
 	}, [])
 
-	const {ref, inView} = useInView({threshold: 0.1})
+	// const {ref, inView} = useInView({threshold: 0.1})
 
+	// This has been temp commented out
+	//
+	// useEffect(() => {
+	// 	console.log(inView)
+
+	// 	const preventTouchMove = (e) => {
+	// 		e.preventDefault()
+	// 	}
+
+	// 	if(inView === true) {
+	// 		console.log('in view')
+	// 		window.addEventListener('touchmove', preventTouchMove, {passive: false})
+			
+	// 	}
+	// 	else{
+	// 		console.log('out of view')
+	// 		window.removeEventListener("touchmove", preventTouchMove, false)
+	// 		console.log('exit')
+	// 		// runwayWrapperRef.current.scrollTo(0, 800)
+	// 	}
+	// }, [inView, ref])
+
+	// console.log(inView)
+
+	// commented this out Adams v1
 	useEffect(() => {
-		console.log(ref.current)
-
-		const handleScrollEnd = (e) => {
-			e.preventDefault()
+		function handleTouchMove(event) {
+		  if (elementRef.current && isElementInView(elementRef.current)) {
+			event.preventDefault()
+			console.log(runwayWrapperRef.current.scrollHeight)
+			runwayWrapperRef.current.scrollTo({
+				top: runwayWrapperRef.current.scrollHeight - 926,
+				behavior: 'smooth'
+			  })
+		  }
 		}
-
-		if(inView) {
-			console.log('in view')
-			window.addEventListener('touchmove', handleScrollEnd, {passive: false})
+	
+		function isElementInView(element) {
+		  const { top, bottom } = element.getBoundingClientRect()
+		  return top >= 0 && bottom <= window.innerHeight
 		}
-		else{
-			console.log('out of view')
-			runwayWrapperRef.current.scrollTo(0, 800)
-			window.removeEventListener('touchmove', handleScrollEnd, {passive: false})
-		}
-	}, [inView])
+		
+		// runwayWrapperRef.current.scrollTo(0, handleTouchMove)
+		window.addEventListener("touchmove", handleTouchMove, {passive: false})
 
-	console.log(inView)
+	
+		return () => {
+		
+		//   window.removeEventListener("touchmove", handleTouchMove)
+		};
+	  }, []);
+
 
 	return (
 		//Keeping the height of the container div to be the height of the visualViewport
@@ -178,7 +217,7 @@ Donec non enim ligula. Aenean dapibus hendrerit metus ornare condimentum. In pul
 
 Nunc dui quam, egestas quis massa cursus, hendrerit condimentum ante. Phasellus suscipit vulputate lectus, nec pulvinar sem ultrices sit amet. Phasellus ut euismod tortor, et pulvinar diam. Morbi sed condimentum ante. Sed posuere ornare erat sit amet sagittis. Donec sed urna pellentesque, elementum urna sed, condimentum ligula. Nullam porttitor vel tellus eu suscipit. Integer a turpis ut augue vehicula scelerisque. Nam ac urna nulla. Vestibulum lacus magna, gravida dapibus lobortis eu, porta eu sem.
 					</div>
-					<div ref={ref} className={classes.apendage}>
+					<div ref={elementRef} className={classes.apendage}>
 						<div ref={appendageChildRef} className={classes.apendageChild}></div>
 					</div>
 				</div>
@@ -192,6 +231,7 @@ Nunc dui quam, egestas quis massa cursus, hendrerit condimentum ante. Phasellus 
 						type='text'
 						className={classes.input}
 						onTouchStart={(e) => {
+							// This needs attention
 							// e.target.focus({preventScroll: true})
 							// footerRef.current.classList.add(classes.footerDivAppend)
 						}}
@@ -271,7 +311,7 @@ const useStyles = makeStyles()((_, props) => ({
 	apendageChild: {
 		display: 'flex',
 		// height: '294px',
-		height: '.1px',
+		height: '1px',
 		width: '100%',
 		background: 'blue'
 	},
@@ -294,7 +334,7 @@ const useStyles = makeStyles()((_, props) => ({
 		// shanes Iphone
 		// bottom: '224.34375px',
 		// Adams Iphone
-		bottom: '234px',
+		bottom: '279px',
 		// Android
 		// bottom: '294px'
 	},
