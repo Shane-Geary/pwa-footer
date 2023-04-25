@@ -4,6 +4,8 @@ import {makeStyles} from 'tss-react/mui' // https://docs.tss-react.dev/
 import {GlobalStyles} from 'tss-react'// https://docs.tss-react.dev/
 // import useScroll from './Hooks/useScroll'
 
+import {useInView} from 'react-intersection-observer'
+
 
 function ViewportConcept() {
 
@@ -26,6 +28,7 @@ function ViewportConcept() {
 	const pageRef = useRef(null)
 	const runwayWrapperRef = useRef(null)
 	const footerRef = useRef(null)
+	const appendageChildRef = useRef(null)
 
 	//Instantiating TSS classes and passing props
 	const {classes} = useStyles(
@@ -64,12 +67,10 @@ function ViewportConcept() {
 		// footerRef.current.addEventListener('touchstart', (e) => {
 		// 	const touchStart = e.touches
 		// })
-		const bodyElement = document.body
-		bodyElement.addEventListener('mousewheel', (e) => {
-			console.log(e)
+		window.document.documentElement.addEventListener('touchmove', (e) => {
+			console.log(ref.current)
 			
 		})
-		console.log(bodyElement)
 	}, [])
 
 	useEffect(() => {
@@ -84,7 +85,27 @@ function ViewportConcept() {
 		}
 	}, [])
 
+	const {ref, inView} = useInView({threshold: 0.1})
 
+	useEffect(() => {
+		console.log(ref.current)
+
+		const handleScrollEnd = (e) => {
+			e.preventDefault()
+		}
+
+		if(inView) {
+			console.log('in view')
+			window.addEventListener('touchmove', handleScrollEnd, {passive: false})
+		}
+		else{
+			console.log('out of view')
+			runwayWrapperRef.current.scrollTo(0, 800)
+			window.removeEventListener('touchmove', handleScrollEnd, {passive: false})
+		}
+	}, [inView])
+
+	console.log(inView)
 
 	return (
 		//Keeping the height of the container div to be the height of the visualViewport
@@ -101,7 +122,7 @@ function ViewportConcept() {
 					}
 				}}
 			/>
-			<div>
+			<div className={classes.masterDiv}>
 				<div
 					ref={runwayWrapperRef}
 					className={classes.runwayWrapper}
@@ -142,7 +163,7 @@ function ViewportConcept() {
 							e.target.focus({preventScroll: true})
 							footerRef.current.classList.add(classes.footerDivAppend)
 						}}
-						onBlur={(e) => {
+						onBlur={() => {
 							footerRef.current.classList.remove(classes.footerDivAppend)
 						}}
 					/>
@@ -157,7 +178,11 @@ Donec non enim ligula. Aenean dapibus hendrerit metus ornare condimentum. In pul
 
 Nunc dui quam, egestas quis massa cursus, hendrerit condimentum ante. Phasellus suscipit vulputate lectus, nec pulvinar sem ultrices sit amet. Phasellus ut euismod tortor, et pulvinar diam. Morbi sed condimentum ante. Sed posuere ornare erat sit amet sagittis. Donec sed urna pellentesque, elementum urna sed, condimentum ligula. Nullam porttitor vel tellus eu suscipit. Integer a turpis ut augue vehicula scelerisque. Nam ac urna nulla. Vestibulum lacus magna, gravida dapibus lobortis eu, porta eu sem.
 					</div>
+					<div ref={ref} className={classes.apendage}>
+						<div ref={appendageChildRef} className={classes.apendageChild}></div>
+					</div>
 				</div>
+				
 				<div
 					ref={footerRef}
 					className={classes.footerDiv}
@@ -189,6 +214,68 @@ Nunc dui quam, egestas quis massa cursus, hendrerit condimentum ante. Phasellus 
 
 const useStyles = makeStyles()((_, props) => ({
 
+	masterDiv: {
+		display: 'flex',
+		position: 'relative',
+		height: '100%',
+
+	},
+
+	input: {width: 40},
+
+	page: {
+		position: 'relative',
+		height: '100dvh',
+		width: '100dvw',
+		overflow: 'hidden'
+	},
+
+	viewportSizes: {
+		fontSize: 14,
+		display: 'block',
+		position: 'absolute',
+		left: '35%',
+	},
+
+	// pageAppend: {
+	// 	overflow: 'hidden',
+	// 	// TODO: This is for Iphone X
+	// 	// height: '410.65625px',
+	// 	height: '355px',
+	// 	transition: 'height .5s',
+	// 	// TODO: Easing-curve: ease-in-out
+	// 	transitionTimingFunction: 'cubic-bezier(.45, .6, .33, .99)'
+	// },
+	runwayWrapper: {
+		position: 'absolute',
+		// height: '4710px',
+		height: '100%',
+		width: '100%',
+		overflowY: 'scroll',
+		WebkitOverflowScrolling: 'touch',
+		backgroundColor: '#ED2290',
+		color: 'white'
+	},
+
+	runwayTop: {height: '300px'},
+
+	runway: {
+		width: '100%',
+		height: '4000px',
+		marginTop: 40
+	},
+
+	apendage: {
+	},
+	
+	apendageChild: {
+		display: 'flex',
+		// height: '294px',
+		height: '.1px',
+		width: '100%',
+		background: 'blue'
+	},
+
 	footerDiv: {
 		// TODO: Fixed was preventing footer from moving on scroll - Android
 		// position: 'fixed',
@@ -207,49 +294,10 @@ const useStyles = makeStyles()((_, props) => ({
 		// shanes Iphone
 		// bottom: '224.34375px',
 		// Adams Iphone
-		// bottom: '234px',
+		bottom: '234px',
 		// Android
-		bottom: '294px'
+		// bottom: '294px'
 	},
-	input: {width: 40},
-	page: {
-		position: 'relative',
-		height: '100dvh',
-		width: '100dvw',
-		overflow: 'hidden'
-	},
-	// pageAppend: {
-	// 	overflow: 'hidden',
-	// 	// TODO: This is for Iphone X
-	// 	// height: '410.65625px',
-	// 	height: '355px',
-	// 	transition: 'height .5s',
-	// 	// TODO: Easing-curve: ease-in-out
-	// 	transitionTimingFunction: 'cubic-bezier(.45, .6, .33, .99)'
-	// },
-	runwayWrapper: {
-		position: 'absolute',
-		height: '100%',
-		width: '100%',
-		overflowY: 'scroll',
-		WebkitOverflowScrolling: 'touch',
-		backgroundColor: '#ED2290',
-		color: 'white'
-	},
-	viewportSizes: {
-		fontSize: 14,
-		display: 'block',
-		position: 'absolute',
-		left: '35%',
-	},
-
-	runwayTop: {height: '300px'},
-
-	runway: {
-		width: '100%',
-		height: '4000px',
-		marginTop: 40
-	}
 }))
 
 export default ViewportConcept
