@@ -4,15 +4,13 @@ import {makeStyles} from 'tss-react/mui' // https://docs.tss-react.dev/
 import {GlobalStyles} from 'tss-react'// https://docs.tss-react.dev/
 // import useScroll from './Hooks/useScroll'
 
-
+import {useInView} from 'react-intersection-observer'
 
 function ViewportConcept() {
 
 	console.log('hello')
 
 	const elementRef = useRef(null)
-
-	//This magic library prevents scrolling issues in mobile browsers
 
 	//State for keeping the viewports height and width
 	const [vvHeight, setVVHeight] = useState(window.visualViewport.height)
@@ -80,25 +78,30 @@ function ViewportConcept() {
 		}
 	}, [])
 
+	const {ref, inView} = useInView()
+
 	// commented this out Adams v1
 	useEffect(() => {
 		const handleTouchMove = (e) => {
-		  if (elementRef.current && isElementInView(elementRef.current)) {
-			e.preventDefault()
-			console.log(runwayWrapperRef.current.scrollHeight)
-			runwayWrapperRef.current.scrollTo({
-				top: runwayWrapperRef.current.scrollHeight - 1584,
-				behavior: 'smooth'
-			  })
-		  }
+			console.log(runwayWrapperRef.current.scrollY)
+			if(elementRef.current && isElementInView(elementRef.current)) {
+				e.preventDefault()
+				console.log(runwayWrapperRef.current.scrollHeight)
+				runwayWrapperRef.current.scrollTo({
+					top: runwayWrapperRef.current.scrollHeight - 1554,
+					behavior: 'smooth'
+				})
+			}
 		}
 	
 		function isElementInView(element) {
 			const { top, bottom } = element.getBoundingClientRect()
+			console.log(top >= 0 && bottom <= window.innerHeight)
 			return top >= 0 && bottom <= window.innerHeight
 		}
 		
 		window.addEventListener("touchmove", handleTouchMove, {passive: false})
+		runwayWrapperRef.current.addEventListener('scroll', handleTouchMove, {passive: false})
 
 		return () => {
 			window.removeEventListener("touchmove", handleTouchMove)
@@ -273,7 +276,7 @@ const useStyles = makeStyles()((_, props) => ({
 
 	apendage: {
 		position: 'relative',
-		top: '-500px',
+		top: '100vh',
 	},
 	
 	apendageChild: {
@@ -303,10 +306,10 @@ const useStyles = makeStyles()((_, props) => ({
 		// shanes Iphone
 		// bottom: '224.34375px',
 		// Adams Iphone
-		// bottom: '279px',
+		bottom: '279px',
 		// Android
 		// Android total content height: 4441
-		bottom: '294px'
+		// bottom: '294px'
 	},
 }))
 
