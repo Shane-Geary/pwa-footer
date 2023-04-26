@@ -4,8 +4,6 @@ import {makeStyles} from 'tss-react/mui' // https://docs.tss-react.dev/
 import {GlobalStyles} from 'tss-react'// https://docs.tss-react.dev/
 // import useScroll from './Hooks/useScroll'
 
-import {useInView} from 'react-intersection-observer'
-
 function ViewportConcept() {
 
 	console.log('hello')
@@ -78,17 +76,20 @@ function ViewportConcept() {
 		}
 	}, [])
 
-	const {ref, inView} = useInView()
-
 	// commented this out Adams v1
 	useEffect(() => {
+		const runwayWrapper = runwayWrapperRef.current
 		const handleTouchMove = (e) => {
-			console.log(runwayWrapperRef.current.scrollY)
+			console.log(runwayWrapperRef.current.scrollTop)
+			if(runwayWrapperRef.current.scrollTop === 0) {
+				runwayWrapperRef.current.scrollTo(0, 1)
+				// runwayWrapperRef.current.scrollTo(0, 0)
+			}
 			if(elementRef.current && isElementInView(elementRef.current)) {
 				e.preventDefault()
 				console.log(runwayWrapperRef.current.scrollHeight)
 				runwayWrapperRef.current.scrollTo({
-					top: runwayWrapperRef.current.scrollHeight - 1554,
+					top: runwayWrapperRef.current.scrollHeight - 1624,
 					behavior: 'smooth'
 				})
 			}
@@ -101,14 +102,40 @@ function ViewportConcept() {
 		}
 		
 		window.addEventListener("touchmove", handleTouchMove, {passive: false})
-		runwayWrapperRef.current.addEventListener('scroll', handleTouchMove, {passive: false})
+		runwayWrapper.addEventListener('scroll', handleTouchMove, {passive: false})
 
 		return () => {
 			window.removeEventListener("touchmove", handleTouchMove)
+			runwayWrapper.addEventListener('scroll', handleTouchMove)
 		}
 	}, [])
 
 	console.log(window.innerHeight)
+
+	// useEffect(() => {
+	// 	const preventScroll = (e) => {
+	// 		if(e.touches && e.touches.length > 0) {
+	// 			const deltaY = e.touches[0].clientY - startY
+	// 			if(Math.abs(deltaY) > 10) {
+	// 				// e.preventDefault()
+	// 				runwayWrapperRef.current.scrollTo(0, 1)
+	// 			}
+	// 		}
+	// 	}
+	
+	// 	let startY = 0
+	// 	const handleTouchStart = (e) => {
+	// 		startY = e.touches[0].clientY
+	// 	}
+	
+	// 	runwayWrapperRef.current.addEventListener("touchstart", handleTouchStart)
+	// 	runwayWrapperRef.current.addEventListener("touchmove", preventScroll, {passive: false})
+	
+	// 	return () => {
+	// 		runwayWrapperRef.current.removeEventListener("touchstart", handleTouchStart)
+	// 		runwayWrapperRef.current.removeEventListener("touchmove", preventScroll)
+	// 	}
+	// })
 
 	return (
 		//Keeping the height of the container div to be the height of the visualViewport
@@ -141,11 +168,17 @@ function ViewportConcept() {
 						onTouchStart={(e) => {
 							e.target.focus({preventScroll: true})
 						}}
-						onTouchEnd={(e) => {
-							e.target.focus({preventScroll: true})
+						onClick={() => {
 							footerRef.current.classList.add(classes.footerDivAppend)
 						}}
-						onBlur={(e) => {
+						onFocus={() => {
+							console.log('scrolled past top')
+							runwayWrapperRef.current.scrollTo(0, 1)
+						}}
+						onTouchEnd={(e) => {
+							e.target.focus({preventScroll: true})
+						}}
+						onBlur={() => {
 							footerRef.current.classList.remove(classes.footerDivAppend)
 						}}
 					/>
@@ -156,15 +189,15 @@ function ViewportConcept() {
 					<textarea
 						type='text'
 						className={classes.input}
-							onClick={(e) => {
+						onClick={(e) => {
 							runwayWrapperRef.current.scrollTo(0, 200)
+							footerRef.current.classList.add(classes.footerDivAppend)
 						}}
 						onTouchStart={(e) => {
 							e.target.focus({preventScroll: true})
 						}}
 						onTouchEnd={(e) => {
 							e.target.focus({preventScroll: true})
-							footerRef.current.classList.add(classes.footerDivAppend)
 						}}
 						onBlur={() => {
 							footerRef.current.classList.remove(classes.footerDivAppend)
@@ -191,7 +224,6 @@ Nunc dui quam, egestas quis massa cursus, hendrerit condimentum ante. Phasellus 
 					className={classes.footerDiv}
 					onClick={() => {
 						console.log('footer clicked/touched')
-						console.log(runwayWrapperRef.current.scrollHeight)
 					}}
 				>
 					<textarea
@@ -199,8 +231,7 @@ Nunc dui quam, egestas quis massa cursus, hendrerit condimentum ante. Phasellus 
 						className={classes.input}
 						onTouchStart={(e) => {
 							// This needs attention
-							// e.target.focus({preventScroll: true})
-							// footerRef.current.classList.add(classes.footerDivAppend)
+							e.target.focus({preventScroll: true})
 						}}
 						onTouchEnd={(e) => {
 							e.target.focus({preventScroll: true})
@@ -304,9 +335,9 @@ const useStyles = makeStyles()((_, props) => ({
 	},
 	footerDivAppend: {
 		// shanes Iphone
-		// bottom: '224.34375px',
+		bottom: '224.34375px',
 		// Adams Iphone
-		bottom: '279px',
+		// bottom: '279px',
 		// Android
 		// Android total content height: 4441
 		// bottom: '294px'
