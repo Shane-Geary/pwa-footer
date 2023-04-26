@@ -4,8 +4,6 @@ import {makeStyles} from 'tss-react/mui' // https://docs.tss-react.dev/
 import {GlobalStyles} from 'tss-react'// https://docs.tss-react.dev/
 // import useScroll from './Hooks/useScroll'
 
-// import {useInView} from 'react-intersection-observer'
-
 
 
 function ViewportConcept() {
@@ -69,82 +67,45 @@ function ViewportConcept() {
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [])
 
-	// useEffect(() => {
-	// 	// footerRef.current.addEventListener('touchstart', (e) => {
-	// 	// 	const touchStart = e.touches
-	// 	// })
-	// 	window.document.documentElement.addEventListener('touchmove', (e) => {
-	// 		console.log(ref.current)
-			
-	// 	})
-	// }, [])
-
 	useEffect(() => {
+		const footer = footerRef.current
 		const handleTouchMove = (e) => {
 			e.preventDefault()
 		}
 
-		footerRef.current.addEventListener('touchmove', handleTouchMove, {passive: false})
+		footer.addEventListener('touchmove', handleTouchMove, {passive: false})
 
 		return () => {
-			footerRef.current.removeEventListener('touchmove', handleTouchMove)
+			footer.removeEventListener('touchmove', handleTouchMove)
 		}
 	}, [])
 
-	// const {ref, inView} = useInView({threshold: 0.1})
-
-	// This has been temp commented out
-	//
-	// useEffect(() => {
-	// 	console.log(inView)
-
-	// 	const preventTouchMove = (e) => {
-	// 		e.preventDefault()
-	// 	}
-
-	// 	if(inView === true) {
-	// 		console.log('in view')
-	// 		window.addEventListener('touchmove', preventTouchMove, {passive: false})
-			
-	// 	}
-	// 	else{
-	// 		console.log('out of view')
-	// 		window.removeEventListener("touchmove", preventTouchMove, false)
-	// 		console.log('exit')
-	// 		// runwayWrapperRef.current.scrollTo(0, 800)
-	// 	}
-	// }, [inView, ref])
-
-	// console.log(inView)
-
 	// commented this out Adams v1
 	useEffect(() => {
-		function handleTouchMove(event) {
+		const handleTouchMove = (e) => {
 		  if (elementRef.current && isElementInView(elementRef.current)) {
-			event.preventDefault()
+			e.preventDefault()
 			console.log(runwayWrapperRef.current.scrollHeight)
 			runwayWrapperRef.current.scrollTo({
-				top: runwayWrapperRef.current.scrollHeight - 926,
+				top: runwayWrapperRef.current.scrollHeight - 1584,
 				behavior: 'smooth'
 			  })
 		  }
 		}
 	
 		function isElementInView(element) {
-		  const { top, bottom } = element.getBoundingClientRect()
-		  return top >= 0 && bottom <= window.innerHeight
+			const { top, bottom } = element.getBoundingClientRect()
+			return top >= 0 && bottom <= window.innerHeight
 		}
 		
-		// runwayWrapperRef.current.scrollTo(0, handleTouchMove)
 		window.addEventListener("touchmove", handleTouchMove, {passive: false})
 
-	
 		return () => {
-		
-		//   window.removeEventListener("touchmove", handleTouchMove)
-		};
-	  }, []);
+			window.removeEventListener("touchmove", handleTouchMove)
+		}
+	}, [])
 
+	console.log(window.innerHeight)
 
 	return (
 		//Keeping the height of the container div to be the height of the visualViewport
@@ -225,7 +186,10 @@ Nunc dui quam, egestas quis massa cursus, hendrerit condimentum ante. Phasellus 
 				<div
 					ref={footerRef}
 					className={classes.footerDiv}
-					onClick={() => console.log('footer clicked/touched')}
+					onClick={() => {
+						console.log('footer clicked/touched')
+						console.log(runwayWrapperRef.current.scrollHeight)
+					}}
 				>
 					<textarea
 						type='text'
@@ -253,6 +217,8 @@ Nunc dui quam, egestas quis massa cursus, hendrerit condimentum ante. Phasellus 
 }
 
 const useStyles = makeStyles()((_, props) => ({
+
+	
 
 	masterDiv: {
 		display: 'flex',
@@ -306,6 +272,8 @@ const useStyles = makeStyles()((_, props) => ({
 	},
 
 	apendage: {
+		position: 'relative',
+		top: '-500px',
 	},
 	
 	apendageChild: {
@@ -313,7 +281,8 @@ const useStyles = makeStyles()((_, props) => ({
 		// height: '294px',
 		height: '1px',
 		width: '100%',
-		background: 'blue'
+		background: 'blue',
+		zIndex: '10'
 	},
 
 	footerDiv: {
@@ -334,9 +303,10 @@ const useStyles = makeStyles()((_, props) => ({
 		// shanes Iphone
 		// bottom: '224.34375px',
 		// Adams Iphone
-		bottom: '279px',
+		// bottom: '279px',
 		// Android
-		// bottom: '294px'
+		// Android total content height: 4441
+		bottom: '294px'
 	},
 }))
 
