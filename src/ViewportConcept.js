@@ -71,6 +71,10 @@ function ViewportConcept() {
 
 		footer.addEventListener('touchmove', handleTouchMove, {passive: false})
 
+		window.addEventListener('virtualkeyboardchange', (e) => {
+			console.log(e)
+		})
+
 		return () => {
 			footer.removeEventListener('touchmove', handleTouchMove)
 		}
@@ -78,17 +82,19 @@ function ViewportConcept() {
 
 	// commented this out Adams v1
 	useEffect(() => {
+		const endOfScrollBumper = window.screen.availHeight * 2
+		console.log(endOfScrollBumper)
+
 		const runwayWrapper = runwayWrapperRef.current
 		const handleTouchMove = (e) => {
 			if(runwayWrapperRef.current.scrollTop === 0) {
 				runwayWrapperRef.current.scrollTo(0, 1)
-				// runwayWrapperRef.current.scrollTo(0, 0)
 			}
 			if(elementRef.current && isElementInView(elementRef.current)) {
 				e.preventDefault()
 				runwayWrapperRef.current.scrollTo({
 					// 1560 for Android - 1624 for Iphone X
-					top: runwayWrapperRef.current.scrollHeight - 1624,
+					top: runwayWrapperRef.current.scrollHeight - endOfScrollBumper,
 					behavior: 'smooth'
 				})
 			}
@@ -139,9 +145,6 @@ function ViewportConcept() {
 		<div
 			ref={pageRef}
 			className={classes.page}
-			onClick={(e) => {
-				navigator.virtualKeyboard.show()
-			}}
 		>
 			<GlobalStyles 
 				styles={{
@@ -174,7 +177,6 @@ function ViewportConcept() {
 							e.target.focus({preventScroll: true})
 							console.log('touch event - class appended')
 							footerRef.current.classList.add(classes.footerDivAppend)
-							navigator.virtualKeyboard.show()
 						}}
 						onFocus={() => {
 							console.log('scrolled past top')
@@ -262,9 +264,6 @@ Nunc dui quam, egestas quis massa cursus, hendrerit condimentum ante. Phasellus 
 }
 
 const useStyles = makeStyles()((_, props) => ({
-
-	
-
 	masterDiv: {
 		display: 'flex',
 		position: 'relative',
@@ -346,12 +345,12 @@ const useStyles = makeStyles()((_, props) => ({
 	},
 	footerDivAppend: {
 		// shanes Iphone
-		bottom: '224.34375px',
+		// bottom: '224.34375px',
 		// Adams Iphone
 		// bottom: '279px',
 		// Android
 		// Android total content height: 4441
-		// bottom: '294px'
+		bottom: '294px'
 	},
 }))
 
