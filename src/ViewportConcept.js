@@ -87,6 +87,7 @@ function ViewportConcept() {
 			if(elementRef.current && isElementInView(elementRef.current)) {
 				e.preventDefault()
 				runwayWrapperRef.current.scrollTo({
+					// 1560 for Android - 1624 for Iphone X
 					top: runwayWrapperRef.current.scrollHeight - 1560,
 					behavior: 'smooth'
 				})
@@ -240,6 +241,7 @@ Nunc dui quam, egestas quis massa cursus, hendrerit condimentum ante. Phasellus 
 						onTouchStart={(e) => {
 							// This needs attention
 							e.target.focus({preventScroll: true})
+							// this needs to be removed to prevent it from closing
 							// footerRef.current.classList.add(classes.footerDivAppend)
 						}}
 						onTouchEnd={(e) => {
