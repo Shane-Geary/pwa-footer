@@ -188,7 +188,7 @@ function ViewportConcept() {
 					<div className={classes.runwayTop}>
 
 					</div>
-					<textarea
+					{/* <textarea
 						type='text'
 						tabIndex='1'
 						className={classes.input}
@@ -206,7 +206,7 @@ function ViewportConcept() {
 						onBlur={() => {
 							footerRef.current.classList.remove(classes.footerDivAppend)
 						}}
-					/>
+					/> */}
 					<div className={classes.runway}>
 				Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur ac bibendum purus. Fusce laoreet risus non erat aliquam, vitae pellentesque odio dignissim. Suspendisse laoreet porttitor finibus. Sed dignissim volutpat lacus, nec gravida est porta in. Nunc mollis, nisi eu efficitur imperdiet, lorem magna mattis turpis, vel tempus nisi lacus vel augue. Suspendisse dui nisi, aliquet ac lacus facilisis, feugiat mollis dolor. Aenean tincidunt aliquam erat, vestibulum porta mauris auctor sed. Sed varius lobortis urna in cursus. Nulla facilisi. Morbi bibendum sagittis lacus.
 
