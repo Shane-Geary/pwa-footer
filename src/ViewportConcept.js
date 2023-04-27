@@ -168,7 +168,7 @@ function ViewportConcept() {
 					<textarea
 						type='text'
 						tabIndex='1'
-						className={classes.input}
+						className={classes.inputOne}
 						onClick={() => {
 							console.log('click event - class appended')
 							footerRef.current.classList.add(classes.footerDivAppend)
@@ -271,6 +271,10 @@ const useStyles = makeStyles()((_, props) => ({
 
 	},
 
+	inputOne: {
+		width: '200px',
+		height: '300px'
+	},
 	input: {width: 40},
 
 	page: {
@@ -345,12 +349,12 @@ const useStyles = makeStyles()((_, props) => ({
 	},
 	footerDivAppend: {
 		// shanes Iphone
-		// bottom: '224.34375px',
+		bottom: '224.34375px',
 		// Adams Iphone
 		// bottom: '279px',
 		// Android
 		// Android total content height: 4441
-		bottom: '294px'
+		// bottom: '294px'
 	},
 }))
 
