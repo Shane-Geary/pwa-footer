@@ -88,7 +88,7 @@ function ViewportConcept() {
 				e.preventDefault()
 				runwayWrapperRef.current.scrollTo({
 					// 1560 for Android - 1624 for Iphone X
-					top: runwayWrapperRef.current.scrollHeight - 1560,
+					top: runwayWrapperRef.current.scrollHeight - 1624,
 					behavior: 'smooth'
 				})
 			}
@@ -139,6 +139,9 @@ function ViewportConcept() {
 		<div
 			ref={pageRef}
 			className={classes.page}
+			onClick={(e) => {
+				navigator.virtualKeyboard.show()
+			}}
 		>
 			<GlobalStyles 
 				styles={{
@@ -171,6 +174,7 @@ function ViewportConcept() {
 							e.target.focus({preventScroll: true})
 							console.log('touch event - class appended')
 							footerRef.current.classList.add(classes.footerDivAppend)
+							navigator.virtualKeyboard.show()
 						}}
 						onFocus={() => {
 							console.log('scrolled past top')
@@ -342,12 +346,12 @@ const useStyles = makeStyles()((_, props) => ({
 	},
 	footerDivAppend: {
 		// shanes Iphone
-		// bottom: '224.34375px',
+		bottom: '224.34375px',
 		// Adams Iphone
 		// bottom: '279px',
 		// Android
 		// Android total content height: 4441
-		bottom: '294px'
+		// bottom: '294px'
 	},
 }))
 
