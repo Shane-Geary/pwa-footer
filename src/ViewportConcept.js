@@ -80,16 +80,14 @@ function ViewportConcept() {
 	useEffect(() => {
 		const runwayWrapper = runwayWrapperRef.current
 		const handleTouchMove = (e) => {
-			console.log(runwayWrapperRef.current.scrollTop)
 			if(runwayWrapperRef.current.scrollTop === 0) {
 				runwayWrapperRef.current.scrollTo(0, 1)
 				// runwayWrapperRef.current.scrollTo(0, 0)
 			}
 			if(elementRef.current && isElementInView(elementRef.current)) {
 				e.preventDefault()
-				console.log(runwayWrapperRef.current.scrollHeight)
 				runwayWrapperRef.current.scrollTo({
-					top: runwayWrapperRef.current.scrollHeight - 1624,
+					top: runwayWrapperRef.current.scrollHeight - 1560,
 					behavior: 'smooth'
 				})
 			}
@@ -109,8 +107,6 @@ function ViewportConcept() {
 			runwayWrapper.addEventListener('scroll', handleTouchMove)
 		}
 	}, [])
-
-	console.log(window.innerHeight)
 
 	// useEffect(() => {
 	// 	const preventScroll = (e) => {
@@ -164,11 +160,15 @@ function ViewportConcept() {
 
 					<textarea
 						type='text'
+						tabIndex='1'
 						className={classes.input}
+						onClick={() => {
+							console.log('click event - class appended')
+							footerRef.current.classList.add(classes.footerDivAppend)
+						}}
 						onTouchStart={(e) => {
 							e.target.focus({preventScroll: true})
-						}}
-						onClick={() => {
+							console.log('touch event - class appended')
 							footerRef.current.classList.add(classes.footerDivAppend)
 						}}
 						onFocus={() => {
@@ -176,6 +176,7 @@ function ViewportConcept() {
 							runwayWrapperRef.current.scrollTo(0, 1)
 						}}
 						onTouchEnd={(e) => {
+							console.log('touch end')
 							e.target.focus({preventScroll: true})
 						}}
 						onBlur={() => {
@@ -188,6 +189,7 @@ function ViewportConcept() {
 					</div>
 					<textarea
 						type='text'
+						tabIndex='1'
 						className={classes.input}
 						onClick={(e) => {
 							runwayWrapperRef.current.scrollTo(0, 200)
@@ -195,6 +197,7 @@ function ViewportConcept() {
 						}}
 						onTouchStart={(e) => {
 							e.target.focus({preventScroll: true})
+							footerRef.current.classList.add(classes.footerDivAppend)
 						}}
 						onTouchEnd={(e) => {
 							e.target.focus({preventScroll: true})
@@ -228,17 +231,19 @@ Nunc dui quam, egestas quis massa cursus, hendrerit condimentum ante. Phasellus 
 				>
 					<textarea
 						type='text'
+						tabIndex='1'
 						className={classes.input}
-						onTouchStart={(e) => {
-							// This needs attention
-							e.target.focus({preventScroll: true})
-						}}
-						onTouchEnd={(e) => {
-							e.target.focus({preventScroll: true})
-						}}
 						onClick={(e) => {
 							e.target.focus({preventScroll: true})
 							footerRef.current.classList.add(classes.footerDivAppend)
+						}}
+						onTouchStart={(e) => {
+							// This needs attention
+							e.target.focus({preventScroll: true})
+							// footerRef.current.classList.add(classes.footerDivAppend)
+						}}
+						onTouchEnd={(e) => {
+							e.target.focus({preventScroll: true})
 						}}
 						onBlur={(e) => {
 							footerRef.current.classList.remove(classes.footerDivAppend)
@@ -335,12 +340,12 @@ const useStyles = makeStyles()((_, props) => ({
 	},
 	footerDivAppend: {
 		// shanes Iphone
-		bottom: '224.34375px',
+		// bottom: '224.34375px',
 		// Adams Iphone
 		// bottom: '279px',
 		// Android
 		// Android total content height: 4441
-		// bottom: '294px'
+		bottom: '294px'
 	},
 }))
 
