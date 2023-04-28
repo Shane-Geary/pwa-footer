@@ -104,6 +104,7 @@ function ViewportConcept() {
 		const footer = footerRef.current
 		const textarea = textareaFooterRef.current
 		const handleTouchMove = (e) => {
+			// textarea.click()
 			if(e.target !== footer.children[0]) {
 				e.preventDefault()
 			}
@@ -112,8 +113,9 @@ function ViewportConcept() {
 			}
 		}
 		const handleFooterInputTouch = (e) => {
+			// textarea.click()
 			e.preventDefault()
-			textarea.click()
+			// textarea.click()
 		}
 
 		textarea.addEventListener('touchstart', handleFooterInputTouch, {passive: false})
@@ -266,7 +268,10 @@ const useStyles = makeStyles()((_, props) => ({
 		width: '100px',
 		height: '140px'
 	},
-	input: {width: 40},
+	input: {
+		width: 40,
+		resize: 'none'
+	},
 
 	page: {
 		position: 'relative',
@@ -346,8 +351,12 @@ const useStyles = makeStyles()((_, props) => ({
 		// Android
 		// Android total content height: 4441
 		// bottom: '294px'
-		bottom: '227.5px'
+		// bottom: '227.5px'
 		// bottom: '221.5px'
+		// Ipad
+		// bottom: '340px'
+		// Surface PC
+		bottom: '369px'
 	},
 }))
 
