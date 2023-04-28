@@ -2,7 +2,6 @@ import {useState, useEffect, useRef} from 'react' //React hooks
 
 import {makeStyles} from 'tss-react/mui' // https://docs.tss-react.dev/
 import {GlobalStyles} from 'tss-react'// https://docs.tss-react.dev/
-// import useScroll from './Hooks/useScroll'
 
 function ViewportConcept() {
 
@@ -23,7 +22,6 @@ function ViewportConcept() {
 	const [vHeightDifference, setVHeightDifference] = useState(window.outerHeight - window.innerHeight)
 	const [vWidthDifference, setVWidthDifference] = useState(window.outerWidth - window.innerWidth)
 
-	// const pageRef = useScroll()
 	const pageRef = useRef(null)
 	const runwayWrapperRef = useRef(null)
 	const footerRef = useRef(null)
@@ -38,8 +36,6 @@ function ViewportConcept() {
 	// useEffect hook for resize event listener and displaying viewport sizes 
 	useEffect(() => {
 		const updateVV = (event) => {
-			// console.log(event)
-
 			setTimeout(() => {
 				// setVInnerHeight(window.innerHeight)
 				// setVInnerWidth(window.innerWidth)
@@ -71,10 +67,6 @@ function ViewportConcept() {
 
 		footer.addEventListener('touchmove', handleTouchMove, {passive: false})
 
-		window.addEventListener('virtualkeyboardchange', (e) => {
-			console.log(e)
-		})
-
 		return () => {
 			footer.removeEventListener('touchmove', handleTouchMove)
 		}
@@ -83,7 +75,6 @@ function ViewportConcept() {
 	// commented this out Adams v1
 	useEffect(() => {
 		const endOfScrollBumper = window.screen.availHeight * 2
-		console.log(endOfScrollBumper)
 
 		const runwayWrapper = runwayWrapperRef.current
 		const handleTouchMove = (e) => {
@@ -102,7 +93,6 @@ function ViewportConcept() {
 	
 		function isElementInView(element) {
 			const { top, bottom } = element.getBoundingClientRect()
-			console.log(top >= 0 && bottom <= window.innerHeight)
 			return top >= 0 && bottom <= window.innerHeight
 		}
 		
@@ -150,8 +140,7 @@ function ViewportConcept() {
 				styles={{
 					'body': {
 						margin: 0,
-						padding: 0,
-						// overflow: 'hidden'
+						padding: 0
 					}
 				}}
 			/>
