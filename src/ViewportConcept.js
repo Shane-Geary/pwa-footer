@@ -8,14 +8,11 @@ function ViewportConcept() {
 	console.log('hello')
 
 	const elementRef = useRef(null)
-
-	//State for keeping the viewports height and width
+	// eslint-disable-next-line no-unused-vars
 	const [vvHeight, setVVHeight] = useState(window.visualViewport.height)
+	// eslint-disable-next-line no-unused-vars
 	const [vvWidth, setVVWidth] = useState(window.visualViewport.width)
-
-	// const [vInnerHeight, setVInnerHeight] = useState(window.innerHeight)
-	// const [vInnerWidth, setVInnerWidth] = useState(window.innerWidth)
-
+	
 	const [vOuterHeight, setVOuterHeight] = useState(window.outerHeight)
 	const [vOuterWidth, setVOuterWidth] = useState(window.outerWidth)
 
@@ -29,25 +26,20 @@ function ViewportConcept() {
 
 	//Instantiating TSS classes and passing props
 	const {classes} = useStyles(
-		{vvHeight, vvWidth}
+		{}
 	)
 	
-
 	// useEffect hook for resize event listener and displaying viewport sizes 
 	useEffect(() => {
-		const updateVV = (event) => {
+		const updateVV = () => {
 			setTimeout(() => {
-				// setVInnerHeight(window.innerHeight)
-				// setVInnerWidth(window.innerWidth)
-
-				// setVVHeight(event.target.height)
-				// setVVWidth(event.target.width)
 
 				setVOuterHeight(window.outerHeight)
 				setVOuterWidth(window.outerWidth)
 
 				setVHeightDifference(window.outerHeight - window.visualViewport.height)
 				setVWidthDifference(window.outerWidth - window.visualViewport.width)
+
 			}, 100)
 		}
 
@@ -57,26 +49,26 @@ function ViewportConcept() {
 			window.visualViewport.removeEventListener(resizeEvent)
 		}
 	// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [])
-
-	useEffect(() => {
-		const footer = footerRef.current
-		const handleTouchMove = (e) => {
-			e.preventDefault()
-		}
-
-		footer.addEventListener('touchmove', handleTouchMove, {passive: false})
-
-		return () => {
-			footer.removeEventListener('touchmove', handleTouchMove)
-		}
+	// TODO - review this hook when moved over to PWA
 	}, [])
 
 	// commented this out Adams v1
 	useEffect(() => {
+		// Note - On a mobile browers when a user scrolls to the bottom of the entire scrollable area it will trigger the 'window' to take over the scroll and reveal 'Ghost DOM' or extra area within the HTML tree that has not been accounted for.  It creates a feeling that the site is broken or the div's are on 'ice skates'.  It basically 'Sucks!' and those jerks a Google and Apple don't give a dam so WE fixed it - Thanks shane.
+
+		// To prevent this problem we don't allow users to ever reach the bottom of scrollable area but more importantly in order for the solution to work the 'endOfScrollBumper' needs to be >= the entire screen size (not just inner or outer viewport height).  We then need to  subtract it from the entire scrollable element in order for it to work.  We go a step further and double the number to put all the content we want in frame.  Its an amazing move to keep the 'Ghost DOM from showing up at the bottom.
+
+		// endOfScrollBumper gives us a Safe Area to scroll to
 		const endOfScrollBumper = window.screen.availHeight * 2
 
+		// runwayWrapper gives us the entire scrollable area
 		const runwayWrapper = runwayWrapperRef.current
+
+		// Note - when reviewing behavior at the stop of the screen we discovered that when the user simply scrolls to the top (allowing scroll to land at the top on it own) the 'window' element will hijack the body's scroll and as a result if the user pulls down on the the screen it will reveal 'Ghost DOM' on the top and effectively break the user experience.  
+
+		// To prevent this we discover that a 1px scroll when the entire scrollable area is at 'Top: 0' fixes this problem.  We haven't addressed how to deal with it during integration because this choice may crop a border.  We may use a 'relative' position to fix the negative visual effects. 
+
+		// handleTouchMove move the entire scrollabe area down 1px
 		const handleTouchMove = (e) => {
 			if(runwayWrapperRef.current.scrollTop === 0) {
 				runwayWrapperRef.current.scrollTo(0, 1)
@@ -84,12 +76,12 @@ function ViewportConcept() {
 			if(elementRef.current && isElementInView(elementRef.current)) {
 				e.preventDefault()
 				runwayWrapperRef.current.scrollTo({
-					// 1560 for Android - 1624 for Iphone X
 					top: runwayWrapperRef.current.scrollHeight - endOfScrollBumper,
 					behavior: 'smooth'
 				})
 			}
 		}
+
 	
 		function isElementInView(element) {
 			const { top, bottom } = element.getBoundingClientRect()
@@ -105,30 +97,18 @@ function ViewportConcept() {
 		}
 	}, [])
 
-	// useEffect(() => {
-	// 	const preventScroll = (e) => {
-	// 		if(e.touches && e.touches.length > 0) {
-	// 			const deltaY = e.touches[0].clientY - startY
-	// 			if(Math.abs(deltaY) > 10) {
-	// 				// e.preventDefault()
-	// 				runwayWrapperRef.current.scrollTo(0, 1)
-	// 			}
-	// 		}
-	// 	}
-	
-	// 	let startY = 0
-	// 	const handleTouchStart = (e) => {
-	// 		startY = e.touches[0].clientY
-	// 	}
-	
-	// 	runwayWrapperRef.current.addEventListener("touchstart", handleTouchStart)
-	// 	runwayWrapperRef.current.addEventListener("touchmove", preventScroll, {passive: false})
-	
-	// 	return () => {
-	// 		runwayWrapperRef.current.removeEventListener("touchstart", handleTouchStart)
-	// 		runwayWrapperRef.current.removeEventListener("touchmove", preventScroll)
-	// 	}
-	// })
+	useEffect(() => {
+		const footer = footerRef.current
+		const handleTouchMove = (e) => {
+			e.preventDefault()
+		}
+
+		footer.addEventListener('touchmove', handleTouchMove, {passive: false})
+
+		return () => {
+			footer.removeEventListener('touchmove', handleTouchMove)
+		}
+	}, [])
 
 	return (
 		//Keeping the height of the container div to be the height of the visualViewport

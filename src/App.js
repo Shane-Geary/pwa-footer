@@ -6,5 +6,4 @@ function App() {
 		<ViewportConcept />
 	)
 }
-// temp
 export default App
