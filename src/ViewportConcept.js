@@ -23,6 +23,7 @@ function ViewportConcept() {
 	const runwayWrapperRef = useRef(null)
 	const footerRef = useRef(null)
 	const appendageChildRef = useRef(null)
+	const textareaFooterRef = useRef(null)
 
 	//Instantiating TSS classes and passing props
 	const {classes} = useStyles(
@@ -71,9 +72,11 @@ function ViewportConcept() {
 		// handleTouchMove move the entire scrollabe area down 1px
 		const handleTouchMove = (e) => {
 			if(runwayWrapperRef.current.scrollTop === 0) {
+				console.log('top bumper')
 				runwayWrapperRef.current.scrollTo(0, 1)
 			}
 			if(elementRef.current && isElementInView(elementRef.current)) {
+				console.log('bottom bumper')
 				e.preventDefault()
 				runwayWrapperRef.current.scrollTo({
 					top: runwayWrapperRef.current.scrollHeight - endOfScrollBumper,
@@ -99,13 +102,29 @@ function ViewportConcept() {
 
 	useEffect(() => {
 		const footer = footerRef.current
+		const textarea = textareaFooterRef.current
 		const handleTouchMove = (e) => {
+			if(e.target !== footer.children[0]) {
+				e.preventDefault()
+			}
+			else{
+				textarea.click()
+			}
+		}
+		const handleFooterInputTouch = (e) => {
 			e.preventDefault()
+			textarea.click()
 		}
 
+		textarea.addEventListener('touchstart', handleFooterInputTouch, {passive: false})
+		textarea.addEventListener('touchmove', handleFooterInputTouch, {passive: false})
+		footer.addEventListener('touchstart', handleTouchMove, {passive: false})
 		footer.addEventListener('touchmove', handleTouchMove, {passive: false})
 
 		return () => {
+			textarea.removeEventListener('touchstart', handleFooterInputTouch)
+			textarea.removeEventListener('touchmove', handleFooterInputTouch)
+			footer.removeEventListener('touchstart', handleTouchMove)
 			footer.removeEventListener('touchmove', handleTouchMove)
 		}
 	}, [])
@@ -144,11 +163,11 @@ function ViewportConcept() {
 						}}
 						onTouchStart={(e) => {
 							e.target.focus({preventScroll: true})
-							console.log('touch event - class appended')
+							console.log('on touch - class appended')
 							footerRef.current.classList.add(classes.footerDivAppend)
 						}}
 						onFocus={() => {
-							console.log('scrolled past top')
+							console.log('on focus')
 							runwayWrapperRef.current.scrollTo(0, 1)
 						}}
 						onTouchEnd={(e) => {
@@ -156,6 +175,7 @@ function ViewportConcept() {
 							e.target.focus({preventScroll: true})
 						}}
 						onBlur={() => {
+							console.log('on blur - class removed')
 							footerRef.current.classList.remove(classes.footerDivAppend)
 						}}
 					/>
@@ -206,6 +226,7 @@ Nunc dui quam, egestas quis massa cursus, hendrerit condimentum ante. Phasellus 
 					}}
 				>
 					<textarea
+						ref={textareaFooterRef}
 						type='text'
 						tabIndex='1'
 						className={classes.input}
@@ -241,8 +262,9 @@ const useStyles = makeStyles()((_, props) => ({
 	},
 
 	inputOne: {
-		width: '200px',
-		height: '300px'
+		margin: '10px',
+		width: '100px',
+		height: '140px'
 	},
 	input: {width: 40},
 
@@ -318,12 +340,14 @@ const useStyles = makeStyles()((_, props) => ({
 	},
 	footerDivAppend: {
 		// shanes Iphone
-		bottom: '224.34375px',
+		// bottom: '224.34375px',
 		// Adams Iphone
 		// bottom: '279px',
 		// Android
 		// Android total content height: 4441
 		// bottom: '294px'
+		bottom: '227.5px'
+		// bottom: '221.5px'
 	},
 }))
 
