@@ -7,7 +7,7 @@ function ViewportConcept() {
 
 	console.log('hello')
 
-	const elementRef = useRef(null)
+	const appendageRef = useRef(null)
 	// eslint-disable-next-line no-unused-vars
 	const [vvHeight, setVVHeight] = useState(window.visualViewport.height)
 	// eslint-disable-next-line no-unused-vars
@@ -65,17 +65,23 @@ function ViewportConcept() {
 		// runwayWrapper gives us the entire scrollable area
 		const runwayWrapper = runwayWrapperRef.current
 
-		// Note - when reviewing behavior at the stop of the screen we discovered that when the user simply scrolls to the top (allowing scroll to land at the top on it own) the 'window' element will hijack the body's scroll and as a result if the user pulls down on the the screen it will reveal 'Ghost DOM' on the top and effectively break the user experience.  
+		// Note - when reviewing behavior at the top of the screen we discovered that when the user simply scrolls to the top (allowing scroll to land at the top on it own) the 'window' element will hijack the body's scroll and as a result if the user pulls down on the the screen it will reveal 'Ghost DOM' on the top and effectively break the user experience.  
 
 		// To prevent this we discover that a 1px scroll when the entire scrollable area is at 'Top: 0' fixes this problem.  We haven't addressed how to deal with it during integration because this choice may crop a border.  We may use a 'relative' position to fix the negative visual effects. 
 
-		// handleTouchMove move the entire scrollabe area down 1px
+		// handleTouchMove 1st if statement moves the entire scrollabe area down 1px
 		const handleTouchMove = (e) => {
 			if(runwayWrapperRef.current.scrollTop === 0) {
 				console.log('top bumper')
 				runwayWrapperRef.current.scrollTo(0, 1)
 			}
-			if(elementRef.current && isElementInView(elementRef.current)) {
+
+			// Note - when the reviewing behavior at the bottom of scroll we discovered that when a users scrolls to the end of the scrollable element that it will latch on to scroll at the 'window or document' level.  When this occures it will present 'Ghost DOM' artifacts that get included.  These artifacts seem to be the same size as the keyboard.  
+
+			// To prevent this we discovered that adding a 1px x 100% appendage Div to the end of the scrollable element allows us to find the end of scrollable area once it comes into view.  We then extend the Scrollable area the full length of the device height.  We also add a scroll event that takes the position to double the length of the device height subtracted from the scrollHeight of the scrollable element so the user maintains view of content that is relevent rather than an empty runway.
+
+			// handleTouchMove 2nd trigger scroll once the appendage Div is within view
+			if(appendageRef.current && isElementInView(appendageRef.current)) {
 				console.log('bottom bumper')
 				e.preventDefault()
 				runwayWrapperRef.current.scrollTo({
@@ -85,12 +91,13 @@ function ViewportConcept() {
 			}
 		}
 
-	
+		// isElementInView function determines whether of not the appendage Div is within view 
 		function isElementInView(element) {
 			const { top, bottom } = element.getBoundingClientRect()
 			return top >= 0 && bottom <= window.innerHeight
 		}
 		
+		// the next few lines add the event listeners that prevent scroll and then removing them on unmount
 		window.addEventListener("touchmove", handleTouchMove, {passive: false})
 		runwayWrapper.addEventListener('scroll', handleTouchMove, {passive: false})
 
@@ -100,11 +107,14 @@ function ViewportConcept() {
 		}
 	}, [])
 
+	// Note - When dealing with an input on a footer, we discovered that you will run into problems with touch events. For example, if a touchmove event happened on the input it would trigger focus on the input but not apply the logic that is set up for touchstart/onClick events for the input. Though, we still do not want touchmove events to fire on the footer itself
+
+	// To fix this, we set up event listeners on touchstart and touchmove to both the footer and it's child input. Where we prevent events on touchstart of the input. On touchmove of the footer, if the target of the event is the child (the input element) we invoke the click event of the input/textarea and if not, we prevent events
+
 	useEffect(() => {
 		const footer = footerRef.current
 		const textarea = textareaFooterRef.current
 		const handleTouchMove = (e) => {
-			// textarea.click()
 			if(e.target !== footer.children[0]) {
 				e.preventDefault()
 			}
@@ -113,9 +123,7 @@ function ViewportConcept() {
 			}
 		}
 		const handleFooterInputTouch = (e) => {
-			// textarea.click()
 			e.preventDefault()
-			// textarea.click()
 		}
 
 		textarea.addEventListener('touchstart', handleFooterInputTouch, {passive: false})
@@ -215,7 +223,7 @@ Donec non enim ligula. Aenean dapibus hendrerit metus ornare condimentum. In pul
 
 Nunc dui quam, egestas quis massa cursus, hendrerit condimentum ante. Phasellus suscipit vulputate lectus, nec pulvinar sem ultrices sit amet. Phasellus ut euismod tortor, et pulvinar diam. Morbi sed condimentum ante. Sed posuere ornare erat sit amet sagittis. Donec sed urna pellentesque, elementum urna sed, condimentum ligula. Nullam porttitor vel tellus eu suscipit. Integer a turpis ut augue vehicula scelerisque. Nam ac urna nulla. Vestibulum lacus magna, gravida dapibus lobortis eu, porta eu sem.
 					</div>
-					<div ref={elementRef} className={classes.apendage}>
+					<div ref={appendageRef} className={classes.apendage}>
 						<div ref={appendageChildRef} className={classes.apendageChild}></div>
 					</div>
 				</div>
@@ -264,17 +272,22 @@ const useStyles = makeStyles()((_, props) => ({
 	},
 
 	inputOne: {
+		// Important! it is critical that inputOne is within the viewport above the keyboard and below Top: 0 at all times, even it it must be calculated dynamically real-time
+
 		margin: '10px',
 		width: '100px',
 		height: '140px'
 	},
 	input: {
+		// Important! the input within a footer works based on the test of this POC but we still have not explored expanding the input dynamically and what effects that may have on the behaviour.  Undesirable may result.  We will have to work that out during implimentation. 
+
 		width: 40,
 		resize: 'none'
 	},
 
 	page: {
 		position: 'relative',
+		// The properties below have not been test or are a part of our stack as of yet but they proved useful in this POC
 		height: '100dvh',
 		width: '100dvw',
 		overflow: 'hidden'
@@ -287,15 +300,6 @@ const useStyles = makeStyles()((_, props) => ({
 		left: '35%',
 	},
 
-	// pageAppend: {
-	// 	overflow: 'hidden',
-	// 	// TODO: This is for Iphone X
-	// 	// height: '410.65625px',
-	// 	height: '355px',
-	// 	transition: 'height .5s',
-	// 	// TODO: Easing-curve: ease-in-out
-	// 	transitionTimingFunction: 'cubic-bezier(.45, .6, .33, .99)'
-	// },
 	runwayWrapper: {
 		position: 'absolute',
 		// height: '4710px',
@@ -316,17 +320,19 @@ const useStyles = makeStyles()((_, props) => ({
 	},
 
 	apendage: {
+		// Important! this div is used for scrolling
 		position: 'relative',
 		top: '100vh',
 	},
 	
 	apendageChild: {
+		// Important! this div is used sizing of the overall apendage model.  Display flex is important to the models structure.
+
 		display: 'flex',
-		// height: '294px',
 		height: '1px',
 		width: '100%',
 		background: 'blue',
-		zIndex: '10'
+		zIndex: '1'
 	},
 
 	footerDiv: {
@@ -343,20 +349,27 @@ const useStyles = makeStyles()((_, props) => ({
 		backgroundColor: 'pink',
 		zIndex: 1
 	},
+
+	// We do a footerDiv class append to help performance and lower Reflow's
+
 	footerDivAppend: {
 		// shanes Iphone
 		// bottom: '224.34375px',
+
 		// Adams Iphone
 		// bottom: '279px',
-		// Android
+
 		// Android total content height: 4441
-		// bottom: '294px'
-		// bottom: '227.5px'
-		// bottom: '221.5px'
+		bottom: '294px'
+
+		// Iphone 8
+		// bottom: '228px'
+
 		// Ipad
 		// bottom: '340px'
+
 		// Surface PC
-		bottom: '369px'
+		// bottom: '369px'
 	},
 }))
 
